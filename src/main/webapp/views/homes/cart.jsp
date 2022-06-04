@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <c:if test="${ empty  lstCartdt }">
 	<div class="alert alert-danger text-center mt-3">
@@ -54,10 +55,19 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<div class="text-center">
-			<a href="/HiennvPH13697_Asm/dathang/${ idCart }"
-				class="btn btn-outline-success">Đặt hàng</a>
-		</div>
+		<form:form action="/HiennvPH13697_Asm/dathang/${ idOrder }"
+			method="post" modelAttribute="entity">
+			<label>Địa chỉ nhận hàng:</label>
+			<form:input path="address" class="form-control mb-3" />
+			<form:errors path="address" class="badge text-danger"></form:errors>
+			<div class="text-center">
+				<button class="btn btn-success">Đặt hàng</button>
+			</div>
+		</form:form>
+		<!-- 		<div class="text-center"> -->
+		<%-- 			<a href="/HiennvPH13697_Asm/dathang/${ idCart }" --%>
+		<!-- 				class="btn btn-outline-success">Đặt hàng</a> -->
+		<!-- 		</div> -->
 	</div>
 </c:if>
 

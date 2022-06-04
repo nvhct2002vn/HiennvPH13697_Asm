@@ -126,50 +126,52 @@ public class AccountController {
 	}
 
 	@PostMapping("update/{id}")
-	public String update(@PathVariable("id") Integer id, Model model,
+	public String update(@PathVariable("id") Account account, Model model,
 			@Valid @ModelAttribute("entity") AccountModel entity, BindingResult result) {
-
-		System.out.println("Get ảnh: " + model.getAttribute("fullname"));
-		if (result.hasErrors()) {
-
-			String view = "/views/admin/accounts/edit.jsp";
-			model.addAttribute("view", view);
-			return "/layout";
-//			return "redirect:/admin/accounts/edit/" + id;
-//			return "/admin/accounts/edit/" + id;
-		} else {
-			Account account = this.accountRepo.getById(id);
-
-			account.setFullname(entity.getFullname());
-			account.setEmail(entity.getEmail());
-			account.setUsername(entity.getUsername());
-
-//			Thêm ảnh
-			if (!entity.getMultiImage().isEmpty()) {
-				String path = context.getRealPath("/photoAccounts");
-				File file = new File(path);
-				if (!file.exists()) {
-					file.mkdirs();
-				}
-				try {
-					String fileName = entity.getMultiImage().getOriginalFilename();
-					File finalFile = new File(file.getAbsoluteFile() + File.separator + fileName);
-					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(finalFile));
-					stream.write(entity.getMultiImage().getBytes());
-					stream.close();
-
-					entity.setPhoto(fileName);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		try {
+			System.out.println("Get ảnh: " + model.getAttribute("fullname"));
+			if (result.hasErrors()) {
+				System.out.println(result.getAllErrors());
+				String view = "/views/admin/accounts/edit.jsp";
+				model.addAttribute("view", view);
+				return "/layout";
 			} else {
-				entity.setPhoto(null);
-			}
-			account.setPhoto(entity.getPhoto());
-			account.setAdmin(entity.getAdmin());
-			account.setActivated(entity.getActivated());
+//				Account account = this.accountRepo.getById(id);
 
-			this.accountRepo.save(account);
+				account.setFullname(entity.getFullname());
+				account.setEmail(entity.getEmail());
+				account.setUsername(entity.getUsername());
+
+//				Thêm ảnh
+				if (!entity.getMultiImage().isEmpty()) {
+					String path = context.getRealPath("/photoAccounts");
+					File file = new File(path);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					try {
+						String fileName = entity.getMultiImage().getOriginalFilename();
+						File finalFile = new File(file.getAbsoluteFile() + File.separator + fileName);
+						BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(finalFile));
+						stream.write(entity.getMultiImage().getBytes());
+						stream.close();
+
+						entity.setPhoto(fileName);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					entity.setPhoto(null);
+				}
+				account.setPhoto(entity.getPhoto());
+				account.setAdmin(entity.getAdmin());
+				account.setActivated(entity.getActivated());
+
+				this.accountRepo.save(account);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
 		}
 
 		return "redirect:/admin/accounts/index";

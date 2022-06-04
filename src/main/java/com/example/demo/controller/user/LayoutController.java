@@ -5,17 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.Binding;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.beans.LoginModel;
+import com.example.demo.beans.OrderModel;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Category;
 import com.example.demo.entities.Order;
@@ -26,6 +30,7 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.OrderDetailsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
+import com.mysql.cj.protocol.Resultset;
 
 @Controller
 public class LayoutController {
@@ -96,31 +101,34 @@ public class LayoutController {
 	}
 
 	@PostMapping("/login")
-	public String login(Model model, HttpSession session, LoginModel login) {
+	public String login(Model model, HttpSession session, @Validated @ModelAttribute("login") LoginModel login,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			String view = "/views/admin/account/login.jsp";
+			model.addAttribute("view", view);
+			return "/layout";
+		} else {
+			List<Account> listAccounts = this.accRepository.findAll();
 
-		System.out.println("Tài khoản: " + login.getUsername());
-		System.out.println("Mật khẩu: " + login.getPassword());
-
-		List<Account> listAccounts = this.accRepository.findAll();
-
-		for (Account x : listAccounts) {
-			if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
-				session.setAttribute("userLogin", x);
-				System.out.println("login thành công: " + x);
-				return "redirect:/home";
+			for (Account x : listAccounts) {
+				if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
+					session.setAttribute("userLogin", x);
+					System.out.println("login thành công: " + x);
+					return "redirect:/home";
+				}
 			}
 		}
-		return "redirect:/loginForm";
+		return "redirect:/login-form";
 	}
 
-	@PostMapping("/cart")
-	public String addPrdToCard(Model model) {
-
-		System.out.println("tạo thành công");
-		String view = "/views/homes/cart.jsp";
-		model.addAttribute("view", view);
-		return "/layout";
-	}
+//	@PostMapping("/cart")
+//	public String addPrdToCard(Model model) {
+//
+//		System.out.println("tạo thành công");
+//		String view = "/views/homes/cart.jsp";
+//		model.addAttribute("view", view);
+//		return "/layout";
+//	}
 
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
@@ -131,14 +139,16 @@ public class LayoutController {
 	}
 
 	@GetMapping("cart")
-	public String cart(Model model, HttpSession session) {
+	public String cart(@ModelAttribute("entity") OrderModel entity, Model model, HttpSession session) {
 
 		Order order = (Order) session.getAttribute("hoaDonMoi");
 		int id = order.getId();
+		session.setAttribute("idOrder", id);
 		if (order != null) {
 			List<OrderDetail> lstCartdt = this.orderDetailRepository.getAllByIDCart(id);
 			model.addAttribute("lstCartdt", lstCartdt);
 			model.addAttribute("khoangTrang", " ");
+			session.setAttribute("lstCartdt", lstCartdt);
 //			model.addAttribute("idCart", order.getId()); // lấy id để gán vào nút button
 		}
 
@@ -173,7 +183,7 @@ public class LayoutController {
 				LocalDate localDate = LocalDate.now();
 				order.setAccount(account);
 				order.setCreateDate(localDate);
-				order.setAddress("Mặc định");
+				order.setAddress("Hoá đơn chờ.");
 				this.orderRepository.save(order);
 				session.setAttribute("hoaDonMoi", order);
 				System.out.println("Tạo hoá đơn thành công!");
@@ -184,10 +194,27 @@ public class LayoutController {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setOrder(order2);
 			orderDetail.setProduct(prd);
-			orderDetail.setQuantity(1);
-			orderDetail.setPrice(prd.getPrice());
-			this.orderDetailRepository.save(orderDetail);
-			System.out.println("Tạo thành công hoá đơn chi tiết!");
+
+			// id sản phẩm
+			int idPrd = prd.getId();
+			// lấy ra list orderDetails
+			List<OrderDetail> listOrderDetails = this.orderDetailRepository.findAll();
+			for (OrderDetail x : listOrderDetails) {
+				if (x.getProduct().getId() == idPrd) {
+					System.out.println("Trùng");
+					System.out.println("ID orderdetail prd: " + x.getProduct().getId());
+					System.out.println("Id prd: " + idPrd);
+					// tìm ra đối tượng đã tồn tại
+					OrderDetail ordUpdate = this.orderDetailRepository.getById(x.getId());
+					ordUpdate.setQuantity(x.getQuantity() + 1);
+					this.orderDetailRepository.save(ordUpdate);
+				} else {
+					orderDetail.setQuantity(1);
+					orderDetail.setPrice(prd.getPrice());
+					this.orderDetailRepository.save(orderDetail);
+					System.out.println("Tạo thành công hoá đơn chi tiết!");
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -200,4 +227,25 @@ public class LayoutController {
 		return "redirect:/cart";
 	}
 
+	@PostMapping("dathang/{id}")
+	public String dathang(HttpSession session, Model model, @PathVariable("id") Order order,
+			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		if (result.hasErrors()) {
+			session.getAttribute("lstCartdt");
+
+			String view = "/views/homes/cart.jsp";
+			model.addAttribute("view", view);
+
+			return "/layout";
+		} else {
+			try {
+				order.setAddress(entity.getAddress());
+				this.orderRepository.save(order);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return "redirect:/cart";
+	}
 }

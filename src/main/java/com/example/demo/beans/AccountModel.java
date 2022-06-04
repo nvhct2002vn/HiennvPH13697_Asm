@@ -22,7 +22,7 @@ public class AccountModel {
 	private String email;
 	@NotBlank(message = "Vui lòng nhập username")
 	private String username;
-	@NotBlank(message = "Vui lòng nhập password")
+//	@NotBlank(message = "Vui lòng nhập password")
 	private String password;
 	private String photo;
 //	@NotEmpty(message = "Vui lòng chọn photo")

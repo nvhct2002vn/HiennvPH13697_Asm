@@ -7,6 +7,24 @@
 	<a href="/HiennvPH13697_Asm/admin/accounts/create"
 		class="btn btn-success">Thêm</a>
 </div>
+<div class="row">
+	<div class="mt-3 d-flex justify-content-end">
+		<b>Sắp xếp theo:</b>
+		<div class="btn-group" role="group"
+			aria-label="Basic outlined example">
+			<a href="/HiennvPH13697_Asm/admin/accounts/index?field=fullname"
+				type="button" class="btn btn-outline-secondary">Họ tên</a> <a
+				href="/HiennvPH13697_Asm/admin/accounts/index?field=username"
+				type="button" class="btn btn-outline-secondary">Username</a> <a
+				href="/HiennvPH13697_Asm/admin/accounts/index?field=email" type="button"
+				class="btn btn-outline-secondary">Email</a> <a
+				href="/HiennvPH13697_Asm/admin/accounts/index?field=activated"
+				type="button" class="btn btn-outline-secondary">Activated</a> <a
+				href="/HiennvPH13697_Asm/admin/accounts/index?field=admin" type="button"
+				class="btn btn-outline-secondary">Admin?</a>
+		</div>
+	</div>
+</div>
 <table class="table">
 	<thead>
 		<tr>
