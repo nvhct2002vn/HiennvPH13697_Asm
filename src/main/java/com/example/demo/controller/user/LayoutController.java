@@ -194,26 +194,34 @@ public class LayoutController {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setOrder(order2);
 			orderDetail.setProduct(prd);
-
+			orderDetail.setPrice(prd.getPrice());
+			int soLuong = 0;
+			int idOrderDT = 0;
 			// id sản phẩm
 			int idPrd = prd.getId();
-			// lấy ra list orderDetails
-			List<OrderDetail> listOrderDetails = this.orderDetailRepository.findAll();
+			// lấy ra list orderDetails có mã order là ... ví dụ có 3
+			List<OrderDetail> listOrderDetails = this.orderDetailRepository.getAllByIDCart(order.getId());
+			// duyệt list order: listdt sẽ chạy số lần = số lượng ordt dùng chung ord vd
+			// chạy 3 lần
 			for (OrderDetail x : listOrderDetails) {
+				// kiểm tra, nếu sản phẩm trong orderDetails giống sp lúc ấn chọn, thì số lượng
+				// sẽ đc cộng lên, và gán id orderdetails đc cộng đó ra để tý update
 				if (x.getProduct().getId() == idPrd) {
-					System.out.println("Trùng");
-					System.out.println("ID orderdetail prd: " + x.getProduct().getId());
-					System.out.println("Id prd: " + idPrd);
-					// tìm ra đối tượng đã tồn tại
-					OrderDetail ordUpdate = this.orderDetailRepository.getById(x.getId());
-					ordUpdate.setQuantity(x.getQuantity() + 1);
-					this.orderDetailRepository.save(ordUpdate);
-				} else {
-					orderDetail.setQuantity(1);
-					orderDetail.setPrice(prd.getPrice());
-					this.orderDetailRepository.save(orderDetail);
-					System.out.println("Tạo thành công hoá đơn chi tiết!");
+					soLuong += x.getQuantity();
+					idOrderDT = x.getId();
 				}
+			}
+			// kiểm tra nếu số lượng lớn hơn 0( đã tồn tại) thì sửa đối tượng được lấy ra
+			// bên trên, còn không thì sẽ thêm mới
+			if (soLuong > 0) {
+				// tìm ra đối tượng đã tồn tại
+				OrderDetail ordUpdate = this.orderDetailRepository.getById(idOrderDT);
+				ordUpdate.setQuantity(soLuong + 1);
+				this.orderDetailRepository.save(ordUpdate);
+			} else {
+				orderDetail.setQuantity(1);
+				this.orderDetailRepository.save(orderDetail);
+				System.out.println("Tạo thành công hoá đơn chi tiết!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
