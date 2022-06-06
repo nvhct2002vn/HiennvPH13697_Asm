@@ -44,7 +44,7 @@
 										<button type="button" class="btn btn-secondary"
 											data-bs-dismiss="modal">Close</button>
 										<a class="btn btn-danger"
-											href="/HiennvPH13697_Asm/removePrdOnCart/${ lstCartdt.id }">Xóa</a>
+											href="/HiennvPH13697_Asm/admin/order-details/delete/${ lstCartdt.id }">Xóa</a>
 									</div>
 								</div>
 							</div>

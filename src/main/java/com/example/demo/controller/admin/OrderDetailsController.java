@@ -114,6 +114,6 @@ public class OrderDetailsController {
 	@GetMapping("delete/{id}")
 	public String delete(@PathVariable("id") OrderDetail orderDetailDelete) {
 		this.orderdetailsRepository.delete(orderDetailDelete);
-		return "redirect:/admin/order-details/index";
+		return "redirect:/admin/orders/index";
 	}
 }
