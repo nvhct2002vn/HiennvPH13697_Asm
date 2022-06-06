@@ -14,4 +14,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetail, Integ
 	@Query("SELECT c FROM order_details c Where order_id= :order")
 	public List<OrderDetail> getAllByIDCart(int order);
 
+	@Query("SELECT SUM(price) FROM order_details WHERE order_id = :order")
+	public Long SumDetails(int order);
 }

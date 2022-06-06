@@ -24,7 +24,7 @@
 						src="/HiennvPH13697_Asm/photoProducts/${ lstCartdt.product.image }"></td>
 					<td>${ lstCartdt.product.category.name}${ khoangTrang }${ lstCartdt.product.name }</td>
 					<td>${ lstCartdt.quantity }</td>
-					<td>${ lstCartdt.product.price }</td>
+					<td>${ lstCartdt.price }</td>
 					<td>
 						<button type="button" class="btn btn-danger"
 							data-bs-toggle="modal"
@@ -55,6 +55,7 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<p>Tổng tiền: ${ tongTien }</p>
 		<form:form action="/HiennvPH13697_Asm/dathang/${ idOrder }"
 			method="post" modelAttribute="entity">
 			<label>Địa chỉ nhận hàng:</label>
@@ -64,10 +65,6 @@
 				<button class="btn btn-success">Đặt hàng</button>
 			</div>
 		</form:form>
-		<!-- 		<div class="text-center"> -->
-		<%-- 			<a href="/HiennvPH13697_Asm/dathang/${ idCart }" --%>
-		<!-- 				class="btn btn-outline-success">Đặt hàng</a> -->
-		<!-- 		</div> -->
 	</div>
 </c:if>
 

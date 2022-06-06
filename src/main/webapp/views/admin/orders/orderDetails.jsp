@@ -53,6 +53,7 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<p>Tổng Tiền: ${ tongTien }</p>
 		<div class="text-center">
 			<a href="/HiennvPH13697_Asm/dathang/${ idCart }"
 				class="btn btn-outline-success">Đặt hàng</a>

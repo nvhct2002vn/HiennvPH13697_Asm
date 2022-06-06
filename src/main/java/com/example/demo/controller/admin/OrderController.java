@@ -1,5 +1,6 @@
 package com.example.demo.controller.admin;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -116,6 +117,16 @@ public class OrderController {
 			model.addAttribute("lstCartdt", lstCartdt);
 			model.addAttribute("khoangTrang", " ");
 		}
+
+		Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
+
+		// foramt tiền
+		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		String moneyString = formatter.format(tongTienDetails);
+
+		System.out.println("Tong tien details: " + moneyString);
+
+		session.setAttribute("tongTien", moneyString);
 
 		String view = "/views/admin/orders/orderDetails.jsp";
 		model.addAttribute("view", view);

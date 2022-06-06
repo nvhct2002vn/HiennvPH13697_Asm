@@ -1,11 +1,11 @@
 package com.example.demo.controller.user;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.Binding;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,6 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.OrderDetailsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
-import com.mysql.cj.protocol.Resultset;
 
 @Controller
 public class LayoutController {
@@ -113,7 +112,7 @@ public class LayoutController {
 			for (Account x : listAccounts) {
 				if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
 					session.setAttribute("userLogin", x);
-					System.out.println("login thành công: " + x);
+					System.out.println("login thành công: " + x.getFullname());
 					return "redirect:/home";
 				}
 			}
@@ -121,14 +120,18 @@ public class LayoutController {
 		return "redirect:/login-form";
 	}
 
-//	@PostMapping("/cart")
-//	public String addPrdToCard(Model model) {
-//
-//		System.out.println("tạo thành công");
-//		String view = "/views/homes/cart.jsp";
-//		model.addAttribute("view", view);
-//		return "/layout";
-//	}
+	@GetMapping("/fill-products/{id}")
+	public String addPrdToCard(Model model, @PathVariable("id") Category entity) {
+		List<Product> dsPrd = this.prdRepository.getAllByIDCate(entity.getId());
+		List<Category> dsCate = this.cateRepository.findAll();
+
+		model.addAttribute("khoangTrang", " ");
+		model.addAttribute("dsCate", dsCate);
+		model.addAttribute("dsPrd", dsPrd);
+		String view = "/views/homes/list-products-filter.jsp";
+		model.addAttribute("view", view);
+		return "/layout";
+	}
 
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
@@ -151,6 +154,16 @@ public class LayoutController {
 			session.setAttribute("lstCartdt", lstCartdt);
 //			model.addAttribute("idCart", order.getId()); // lấy id để gán vào nút button
 		}
+
+		Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
+
+		// foramt tiền
+		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		String moneyString = formatter.format(tongTienDetails);
+
+		System.out.println("Tong tien details: " + moneyString);
+
+		session.setAttribute("tongTien", moneyString);
 
 		String view = "/views/homes/cart.jsp";
 		model.addAttribute("view", view);
@@ -194,7 +207,7 @@ public class LayoutController {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setOrder(order2);
 			orderDetail.setProduct(prd);
-			orderDetail.setPrice(prd.getPrice());
+
 			int soLuong = 0;
 			int idOrderDT = 0;
 			// id sản phẩm
@@ -204,6 +217,7 @@ public class LayoutController {
 			// duyệt list order: listdt sẽ chạy số lần = số lượng ordt dùng chung ord vd
 			// chạy 3 lần
 			for (OrderDetail x : listOrderDetails) {
+				session.setAttribute("tongTien", x.getPrice());
 				// kiểm tra, nếu sản phẩm trong orderDetails giống sp lúc ấn chọn, thì số lượng
 				// sẽ đc cộng lên, và gán id orderdetails đc cộng đó ra để tý update
 				if (x.getProduct().getId() == idPrd) {
@@ -216,13 +230,17 @@ public class LayoutController {
 			if (soLuong > 0) {
 				// tìm ra đối tượng đã tồn tại
 				OrderDetail ordUpdate = this.orderDetailRepository.getById(idOrderDT);
+				System.out.println("Số lượng: " + soLuong);
+				ordUpdate.setPrice(prd.getPrice() * (soLuong + 1));
 				ordUpdate.setQuantity(soLuong + 1);
 				this.orderDetailRepository.save(ordUpdate);
 			} else {
+				orderDetail.setPrice(prd.getPrice());
 				orderDetail.setQuantity(1);
 				this.orderDetailRepository.save(orderDetail);
 				System.out.println("Tạo thành công hoá đơn chi tiết!");
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
