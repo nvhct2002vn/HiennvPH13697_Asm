@@ -7,7 +7,6 @@
 		<h4 class="text-danger">Giỏ hàng trống!</h4>
 	</div>
 </c:if>
-<h1>Giỏ hàng</h1>
 <c:if test="${ !empty  lstCartdt }">
 	<div class="table-responsive">
 		<table class="table">
