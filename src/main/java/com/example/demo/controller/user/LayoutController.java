@@ -153,9 +153,11 @@ public class LayoutController {
 			model.addAttribute("khoangTrang", " ");
 			session.setAttribute("lstCartdt", lstCartdt);
 //			model.addAttribute("idCart", order.getId()); // lấy id để gán vào nút button
+			Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
+			System.out.println("Tong tiền: " + tongTienDetails);
+			session.setAttribute("tongTien", tongTienDetails);
 		}
 
-//		Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
 //
 //		// foramt tiền
 //		NumberFormat formatter = NumberFormat.getCurrencyInstance();
@@ -163,7 +165,6 @@ public class LayoutController {
 //
 //		System.out.println("Tong tien details: " + moneyString);
 //
-//		session.setAttribute("tongTien", moneyString);
 
 		String view = "/views/homes/cart.jsp";
 		model.addAttribute("view", view);
@@ -207,7 +208,6 @@ public class LayoutController {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setOrder(order2);
 			orderDetail.setProduct(prd);
-			orderDetail.setPrice(prd.getPrice());
 
 			int soLuong = 0;
 			int idOrderDT = 0;
@@ -232,11 +232,12 @@ public class LayoutController {
 				// tìm ra đối tượng đã tồn tại
 				OrderDetail ordUpdate = this.orderDetailRepository.getById(idOrderDT);
 				System.out.println("Số lượng: " + soLuong);
-//				ordUpdate.setPrice(prd.getPrice() * (soLuong + 1));
+				ordUpdate.setPrice(prd.getPrice() * (soLuong + 1));
 				ordUpdate.setQuantity(soLuong + 1);
 				this.orderDetailRepository.save(ordUpdate);
 			} else {
 				orderDetail.setQuantity(1);
+				orderDetail.setPrice(prd.getPrice());
 				this.orderDetailRepository.save(orderDetail);
 				System.out.println("Tạo thành công hoá đơn chi tiết!");
 			}

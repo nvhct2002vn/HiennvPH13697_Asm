@@ -4,7 +4,6 @@ package com.example.demo.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -24,31 +23,6 @@ public class Product implements Serializable {
 
 	/** Primary key. */
 	protected static final String PK = "id";
-
-	/**
-	 * The optimistic lock. Available via standard bean get/set operations.
-	 */
-//    @Version
-//    @Column(name="LOCK_FLAG")
-//    private Integer lockFlag;
-//
-//    /**
-//     * Access method for the lockFlag property.
-//     *
-//     * @return the current value of the lockFlag property
-//     */
-//    public Integer getLockFlag() {
-//        return lockFlag;
-//    }
-//
-//    /**
-//     * Sets the value of the lockFlag property.
-//     *
-//     * @param aLockFlag the new value of the lockFlag property
-//     */
-//    public void setLockFlag(Integer aLockFlag) {
-//        lockFlag = aLockFlag;
-//    }
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -159,7 +133,7 @@ public class Product implements Serializable {
 	/**
 	 * Setter method for createdDate.
 	 *
-	 * @param now the new value for createdDate
+	 * @param aCreatedDate the new value for createdDate
 	 */
 	public void setCreatedDate(LocalDate aCreatedDate) {
 		createdDate = aCreatedDate;
