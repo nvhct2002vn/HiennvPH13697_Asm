@@ -245,6 +245,7 @@ public class LayoutController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		session.setAttribute("trangThaiButton", 0);
 		return "redirect:/cart";
 	}
 
@@ -267,6 +268,9 @@ public class LayoutController {
 			return "/layout";
 		} else {
 			try {
+				session.setAttribute("message", "Đặt hàng thành công!");
+				order.setStatus(1);
+				session.setAttribute("trangThaiButton", 1);// đặt hàng
 				order.setAddress(entity.getAddress());
 				this.orderRepository.save(order);
 			} catch (Exception e) {
@@ -274,5 +278,36 @@ public class LayoutController {
 			}
 		}
 		return "redirect:/cart";
+	}
+
+	@GetMapping("huydonhang/{id}")
+	public String huydonhang(HttpSession session, Model model, @PathVariable("id") Order order,
+			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		try {
+			session.setAttribute("message", "Huỷ đặt hàng thành công!");
+			session.setAttribute("trangThaiButton", 0); // chờ
+			order.setStatus(0);
+			order.setAddress("Đã huỷ!");
+			this.orderRepository.save(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/cart";
+	}
+
+	@GetMapping("xacNhanDonHang/{id}")
+	public String xacNhanDonHang(HttpSession session, Model model, @PathVariable("id") Order order,
+			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		try {
+			session.setAttribute("message", "Xác nhận đơn hàng thành công!");
+//			session.setAttribute("trangThaiButton", 2); // đã xác nhận
+			order.setStatus(2);
+			this.orderRepository.save(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/admin/orders/index";
 	}
 }

@@ -38,8 +38,8 @@ public class OrderDetailsController {
 
 	@GetMapping("/index")
 	public String index(Model model, @RequestParam(name = "page", defaultValue = ("0")) Integer page,
-			@RequestParam(name = "size", defaultValue = ("5")) Integer size,
-			@RequestParam(name = "field", defaultValue = ("order.id")) String field) {
+			@RequestParam(name = "size", defaultValue = ("10")) Integer size,
+			@RequestParam(name = "field", defaultValue = ("id")) String field) {
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by(field));
 		Page<OrderDetail> orderdetails = this.orderdetailsRepository.findAll(pageable);

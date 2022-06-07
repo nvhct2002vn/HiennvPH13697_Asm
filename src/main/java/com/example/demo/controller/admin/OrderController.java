@@ -42,8 +42,8 @@ public class OrderController {
 
 	@GetMapping("/index")
 	public String index(Model model, @RequestParam(name = "page", defaultValue = ("0")) Integer page,
-			@RequestParam(name = "size", defaultValue = ("5")) Integer size,
-			@RequestParam(name = "field", defaultValue = ("createDate")) String field) {
+			@RequestParam(name = "size", defaultValue = ("10")) Integer size,
+			@RequestParam(name = "field", defaultValue = ("id")) String field) {
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by(field));
 		Page<Order> order = this.orderRepository.findAll(pageable);
@@ -108,6 +108,7 @@ public class OrderController {
 		return "redirect:/admin/orders/index";
 	}
 
+	// xem chi tiết hoá đơn
 	@GetMapping("order-details/{id}")
 	public String orderDetails(@PathVariable("id") Order order, Model model, HttpSession session) {
 
@@ -117,6 +118,8 @@ public class OrderController {
 			model.addAttribute("lstCartdt", lstCartdt);
 			model.addAttribute("khoangTrang", " ");
 		}
+		model.addAttribute("Buttonstatus", order.getStatus());
+		System.out.println("Buttonstatus: " + order.getStatus());
 
 		Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
 

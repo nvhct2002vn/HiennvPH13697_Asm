@@ -86,6 +86,8 @@
 									<li><a class="dropdown-item" href="#">Cập nhật tài
 											khoản</a></li>
 									<li><a class="dropdown-item"
+										href="/HiennvPH13697_Asm/users/histories">Lịch sử mua hàng</a></li>
+									<li><a class="dropdown-item"
 										href="/HiennvPH13697_Asm/logout">Đăng xuất</a></li>
 								</c:if>
 <!-- 								<li><a class="dropdown-item" -->
