@@ -18,7 +18,7 @@
 				<th>Hình ảnh</th>
 				<th>Tên sản phẩm</th>
 				<th>Số lượng</th>
-				<th>Đơn giá</th>
+				<th>Thành tiền</th>
 				<th colspan="1">Thao tác</th>
 			</tr>
 			<c:forEach var="lstCartdt" items="${ lstCartdt }">

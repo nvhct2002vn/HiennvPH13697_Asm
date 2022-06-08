@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="text-center">
-	<a href="/HiennvPH13697_Asm/admin/orders/create"
-		class="btn btn-success">Create</a>
-</div>
+<!-- <div class="text-center"> -->
+<!-- 	<a href="/HiennvPH13697_Asm/admin/orders/create" -->
+<!-- 		class="btn btn-success">Create</a> -->
+<!-- </div> -->
 <table class="table">
 	<thead>
 		<tr>

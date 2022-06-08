@@ -13,9 +13,7 @@
 		<div class="btn-group" role="group"
 			aria-label="Basic outlined example">
 			<a href="/HiennvPH13697_Asm/admin/orders/index?field=status"
-				type="button" class="btn btn-outline-secondary">Status</a> <a
-				href="/HiennvPH13697_Asm/admin/orders/index?field=username"
-				type="button" class="btn btn-outline-secondary">User</a>
+				type="button" class="btn btn-outline-secondary">Status</a>
 		</div>
 	</div>
 </div>

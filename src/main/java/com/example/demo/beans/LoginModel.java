@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginModel {
-	@NotBlank(message = "Vui lòng nhập username.")
-	private String username;
+//	@NotBlank(message = "Vui lòng nhập username.")
+//	private String username;
+	@NotBlank(message = "Vui lòng nhập email.")
+	private String email;
 	@NotBlank(message = "Vui lòng nhập password.")
 	private String password;
 }

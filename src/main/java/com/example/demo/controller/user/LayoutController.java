@@ -30,6 +30,7 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.OrderDetailsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.untils.EncryptUtil;
 
 @Controller
 public class LayoutController {
@@ -102,20 +103,45 @@ public class LayoutController {
 	@PostMapping("/login")
 	public String login(Model model, HttpSession session, @Validated @ModelAttribute("login") LoginModel login,
 			BindingResult result) {
-		if (result.hasErrors()) {
-			String view = "/views/admin/account/login.jsp";
-			model.addAttribute("view", view);
-			return "/layout";
-		} else {
-			List<Account> listAccounts = this.accRepository.findAll();
+//		if (result.hasErrors()) {
+//			String view = "/views/admin/account/login.jsp";
+//			model.addAttribute("view", view);
+//			return "/layout";
+//		} else {
+//			List<Account> listAccounts = this.accRepository.findAll();
+//
+//			for (Account x : listAccounts) {
+//				if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
+//					session.setAttribute("userLogin", x);
+//					System.out.println("login thành công: " + x.getFullname());
+//					return "redirect:/home";
+//				}else {
+//					session.setAttribute("error", "Mật khẩu không chính xác!");
+//				}
+//			}
+//		}
+		try {
+			String email = login.getEmail();
+			String password = login.getPassword();
 
-			for (Account x : listAccounts) {
-				if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
-					session.setAttribute("userLogin", x);
-					System.out.println("login thành công: " + x.getFullname());
+			Account account = accRepository.findByEmail(email);
+			boolean check = EncryptUtil.check(password, account.getPassword());
+
+			if (result.hasErrors()) {
+				String view = "/views/admin/account/login.jsp";
+				model.addAttribute("view", view);
+				return "/layout";
+			} else {
+				if (check == true) {
+					session.setAttribute("userLogin", account);
 					return "redirect:/home";
+				} else {
+					session.setAttribute("error", "Mật khẩu không chính xác!");
 				}
 			}
+		} catch (Exception e) {
+			session.setAttribute("error", "Đăng nhập thất bại!");
+			e.printStackTrace();
 		}
 		return "redirect:/login-form";
 	}
