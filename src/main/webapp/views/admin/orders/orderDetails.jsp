@@ -23,40 +23,13 @@
 					<td>${ lstCartdt.product.category.name}${ khoangTrang }${ lstCartdt.product.name }</td>
 					<td>${ lstCartdt.quantity }</td>
 					<td>${ lstCartdt.product.price }</td>
-					<!-- 					<td> -->
-					<!-- 						<button type="button" class="btn btn-danger" -->
-					<!-- 							data-bs-toggle="modal" -->
-					<%-- 							data-bs-target="#exampleModal${ lstCartdt.id }">Xóa</button> <!-- Modal --> --%>
-					<%-- 						<div class="modal fade" id="exampleModal${ lstCartdt.id }" --%>
-					<!-- 							tabindex="-1" aria-labelledby="exampleModalLabel" -->
-					<!-- 							aria-hidden="true"> -->
-					<!-- 							<div class="modal-dialog"> -->
-					<!-- 								<div class="modal-content"> -->
-					<!-- 									<div class="modal-header"> -->
-					<!-- 										<h5 class="modal-title" id="exampleModalLabel">Xóa sản -->
-					<!-- 											phẩm</h5> -->
-					<!-- 										<button type="button" class="btn-close" -->
-					<!-- 											data-bs-dismiss="modal" aria-label="Close"></button> -->
-					<!-- 									</div> -->
-					<!-- 									<div class="modal-body">Bạn chắc chắn muốn xóa sản phẩm -->
-					<!-- 										này hay không ?</div> -->
-					<!-- 									<div class="modal-footer"> -->
-					<!-- 										<button type="button" class="btn btn-secondary" -->
-					<!-- 											data-bs-dismiss="modal">Close</button> -->
-					<!-- 										<a class="btn btn-danger" -->
-					<%-- 											href="/HiennvPH13697_Asm/admin/order-details/delete/${ lstCartdt.id }">Xóa</a> --%>
-					<!-- 									</div> -->
-					<!-- 								</div> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</td> -->
 				</tr>
 			</c:forEach>
 		</table>
 		<p>Tổng Tiền: ${ tongTien }</p>
-		<c:if test="${ Buttonstatus == 1 }">
+		<c:if test="${ status == 1 }">
 			<div class="text-center">
-				<a href="/HiennvPH13697_Asm/xacNhanDonHang/${ idOrder }"
+				<a href="/HiennvPH13697_Asm/admin/orders/xacNhanDonHang/${ idOrder }"
 					class="btn btn-outline-success">Xác nhận đơn hàng</a>
 			</div>
 		</c:if>

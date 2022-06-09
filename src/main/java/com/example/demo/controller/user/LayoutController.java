@@ -2,12 +2,15 @@ package com.example.demo.controller.user;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.beans.CartModel;
 import com.example.demo.beans.LoginModel;
 import com.example.demo.beans.OrderModel;
 import com.example.demo.entities.Account;
@@ -93,6 +98,7 @@ public class LayoutController {
 		return "/layout";
 	}
 
+	// form đăng nhập
 	@GetMapping("/login-form")
 	public String loginForm(Model model, @ModelAttribute("login") LoginModel login) {
 		String view = "/views/admin/account/login.jsp";
@@ -100,26 +106,10 @@ public class LayoutController {
 		return "/layout";
 	}
 
+	// đăng nhập
 	@PostMapping("/login")
 	public String login(Model model, HttpSession session, @Validated @ModelAttribute("login") LoginModel login,
 			BindingResult result) {
-//		if (result.hasErrors()) {
-//			String view = "/views/admin/account/login.jsp";
-//			model.addAttribute("view", view);
-//			return "/layout";
-//		} else {
-//			List<Account> listAccounts = this.accRepository.findAll();
-//
-//			for (Account x : listAccounts) {
-//				if (x.getUsername().equals(login.getUsername()) && x.getPassword().equals(login.getPassword())) {
-//					session.setAttribute("userLogin", x);
-//					System.out.println("login thành công: " + x.getFullname());
-//					return "redirect:/home";
-//				}else {
-//					session.setAttribute("error", "Mật khẩu không chính xác!");
-//				}
-//			}
-//		}
 		try {
 			String email = login.getEmail();
 			String password = login.getPassword();
@@ -146,6 +136,7 @@ public class LayoutController {
 		return "redirect:/login-form";
 	}
 
+	// lọc sản phẩm
 	@GetMapping("/fill-products/{id}")
 	public String addPrdToCard(Model model, @PathVariable("id") Category entity) {
 		List<Product> dsPrd = this.prdRepository.getAllByIDCate(entity.getId());
@@ -159,6 +150,7 @@ public class LayoutController {
 		return "/layout";
 	}
 
+	// đăng xuất
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
 		session.removeAttribute("userLogin");
@@ -167,30 +159,26 @@ public class LayoutController {
 		return "redirect:/home";
 	}
 
+	// hiển thị rỏ hàng
 	@GetMapping("cart")
-	public String cart(@ModelAttribute("entity") OrderModel entity, Model model, HttpSession session) {
+	public String cart(Model model, HttpSession session) {
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
 
-		Order order = (Order) session.getAttribute("hoaDonMoi");
-		if (order != null) {
-			int id = order.getId();
-			session.setAttribute("idOrder", id);
-			List<OrderDetail> lstCartdt = this.orderDetailRepository.getAllByIDCart(id);
-			model.addAttribute("lstCartdt", lstCartdt);
-			model.addAttribute("khoangTrang", " ");
-			session.setAttribute("lstCartdt", lstCartdt);
-//			model.addAttribute("idCart", order.getId()); // lấy id để gán vào nút button
-			Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
-			System.out.println("Tong tiền: " + tongTienDetails);
-			session.setAttribute("tongTien", tongTienDetails);
+		model.addAttribute("listCart", cart);
+
+		int thanhTien = 0;
+		int tongTien = 0;
+
+		Set<Integer> keySet = cart.keySet();
+		for (Integer x : keySet) {
+			thanhTien = cart.get(x).getQuantity() * cart.get(x).getProduct().getPrice();
+			System.out.println("Thành tiền for: " + thanhTien);
+			tongTien += thanhTien;
+			System.out.println("Tổng tiền for: " + tongTien);
 		}
-
-//
-//		// foramt tiền
-//		NumberFormat formatter = NumberFormat.getCurrencyInstance();
-//		String moneyString = formatter.format(tongTienDetails);
-//
-//		System.out.println("Tong tien details: " + moneyString);
-//
+//		session.setAttribute("thanhTien", thanhTien);
+		model.addAttribute("tongTien", tongTien);
+		model.addAttribute("khoangTrang", " ");
 
 		String view = "/views/homes/cart.jsp";
 		model.addAttribute("view", view);
@@ -198,142 +186,79 @@ public class LayoutController {
 		return "/layout";
 	}
 
-	@ModelAttribute("categoryIds")
-	public Map<Integer, String> getCategory() {
-		Map<Integer, String> map = new HashMap<Integer, String>();
-		List<Category> list = cateRepository.findAll();
-		for (Category x : list) {
-			map.put(x.getId(), x.getName());
-		}
-		return map;
-	}
-
+	// thếm sản phẩm vào rỏ hàng
 	@GetMapping("addToCart/{id}")
 	public String addToCart(Model model, @PathVariable("id") Product prd, HttpSession session) {
-		try {
-			Order order = (Order) session.getAttribute("hoaDonMoi");
-			Account account = (Account) session.getAttribute("userLogin");
 
-			if (account == null) {
-				account = this.accRepository.getById(26);
-			}
+		int idPrd = prd.getId();
+		CartModel cartModel;
 
-			if (order == null) {
-				order = new Order();
-				LocalDate localDate = LocalDate.now();
-				order.setAccount(account);
-				order.setCreateDate(localDate);
-				order.setAddress("Hoá đơn chờ.");
-				this.orderRepository.save(order);
-				session.setAttribute("hoaDonMoi", order);
-				System.out.println("Tạo hoá đơn thành công!");
-			} else {
-				System.out.println("Hoá đơn đã tồn tại: " + session.getAttribute("hoaDonMoi"));
-			}
-			Order order2 = (Order) session.getAttribute("hoaDonMoi");
-			OrderDetail orderDetail = new OrderDetail();
-			orderDetail.setOrder(order2);
-			orderDetail.setProduct(prd);
-
-			int soLuong = 0;
-			int idOrderDT = 0;
-			// id sản phẩm
-			int idPrd = prd.getId();
-			// lấy ra list orderDetails có mã order là ... ví dụ có 3
-			List<OrderDetail> listOrderDetails = this.orderDetailRepository.getAllByIDCart(order.getId());
-			// duyệt list order: listdt sẽ chạy số lần = số lượng ordt dùng chung ord vd
-			// chạy 3 lần
-			for (OrderDetail x : listOrderDetails) {
-				session.setAttribute("tongTien", x.getPrice());
-				// kiểm tra, nếu sản phẩm trong orderDetails giống sp lúc ấn chọn, thì số lượng
-				// sẽ đc cộng lên, và gán id orderdetails đc cộng đó ra để tý update
-				if (x.getProduct().getId() == idPrd) {
-					soLuong += x.getQuantity();
-					idOrderDT = x.getId();
-				}
-			}
-			// kiểm tra nếu số lượng lớn hơn 0( đã tồn tại) thì sửa đối tượng được lấy ra
-			// bên trên, còn không thì sẽ thêm mới
-			if (soLuong > 0) {
-				// tìm ra đối tượng đã tồn tại
-				OrderDetail ordUpdate = this.orderDetailRepository.getById(idOrderDT);
-				System.out.println("Số lượng: " + soLuong);
-				ordUpdate.setPrice(prd.getPrice() * (soLuong + 1));
-				ordUpdate.setQuantity(soLuong + 1);
-				this.orderDetailRepository.save(ordUpdate);
-			} else {
-				orderDetail.setQuantity(1);
-				orderDetail.setPrice(prd.getPrice());
-				this.orderDetailRepository.save(orderDetail);
-				System.out.println("Tạo thành công hoá đơn chi tiết!");
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		session.setAttribute("trangThaiButton", 0);
-		return "redirect:/cart";
-	}
-
-	@GetMapping("removePrdOnCart/{id}")
-	public String removePrdOnCart(@PathVariable("id") OrderDetail ord) {
-		this.orderDetailRepository.delete(ord);
-		return "redirect:/cart";
-	}
-
-	@PostMapping("dathang/{id}")
-	public String dathang(HttpSession session, Model model, @PathVariable("id") Order order,
-			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
-		model.addAttribute("idOrder", session.getAttribute("idOrder"));
-		if (result.hasErrors()) {
-			session.getAttribute("lstCartdt");
-
-			String view = "/views/homes/cart.jsp";
-			model.addAttribute("view", view);
-
-			return "/layout";
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
+		if (cart == null) {
+			cart = new HashMap<Integer, CartModel>();
+			cartModel = new CartModel(prd, 1);
+			cart.put(idPrd, cartModel);
 		} else {
-			try {
-				session.setAttribute("message", "Đặt hàng thành công!");
-				order.setStatus(1);
-				session.setAttribute("trangThaiButton", 1);// đặt hàng
-				order.setAddress(entity.getAddress());
-				this.orderRepository.save(order);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (cart.containsKey(idPrd)) {
+				cartModel = cart.get(idPrd);
+				cartModel.setQuantity(cartModel.getQuantity() + 1);
+			} else {
+				cartModel = new CartModel(prd, 1);
+				cart.put(idPrd, cartModel);
 			}
 		}
+
+		session.setAttribute("hoaDonMoi", cart);
+		System.out.println("Cart hashMap:" + cart);
+
 		return "redirect:/cart";
 	}
 
-	@GetMapping("huydonhang/{id}")
-	public String huydonhang(HttpSession session, Model model, @PathVariable("id") Order order,
-			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
-		model.addAttribute("idOrder", session.getAttribute("idOrder"));
-		try {
-			session.setAttribute("message", "Huỷ đặt hàng thành công!");
-			session.setAttribute("trangThaiButton", 0); // chờ
-			order.setStatus(0);
-			order.setAddress("Đã huỷ!");
-			this.orderRepository.save(order);
-		} catch (Exception e) {
-			e.printStackTrace();
+	// xoá sp trong rỏ hàng
+	@GetMapping("removePrdOnCart/{id}")
+	public String removePrdOnCart(@PathVariable("id") Integer id, HttpSession session) {
+		System.out.println("id xoá: " + id);
+
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("cart");
+
+		if (cart != null) {
+			if (cart.containsKey(id)) {
+				cart.remove(id);
+			}
 		}
+
 		return "redirect:/cart";
 	}
 
-	@GetMapping("xacNhanDonHang/{id}")
-	public String xacNhanDonHang(HttpSession session, Model model, @PathVariable("id") Order order,
-			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
-		model.addAttribute("idOrder", session.getAttribute("idOrder"));
-		try {
-			session.setAttribute("message", "Xác nhận đơn hàng thành công!");
-//			session.setAttribute("trangThaiButton", 2); // đã xác nhận
-			order.setStatus(2);
-			this.orderRepository.save(order);
-		} catch (Exception e) {
-			e.printStackTrace();
+	// Đặt hàng
+	@GetMapping("dathang")
+	public String dathang(HttpSession session, Model model, @RequestParam("address") String address) {
+		Account acc = (Account) session.getAttribute("userLogin");
+
+		LocalDate localDate = LocalDate.now();
+		Order order = new Order();
+		order.setAccount(acc);
+		order.setCreateDate(localDate);
+		order.setAddress(address);
+		order.setStatus(1);
+		this.orderRepository.save(order);
+
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
+
+		Set<Integer> keySet = cart.keySet();
+		for (Integer x : keySet) {
+			OrderDetail orderDetail = new OrderDetail();
+			orderDetail.setOrder(order);
+			orderDetail.setPrice(cart.get(x).getQuantity() * cart.get(x).getProduct().getPrice());
+			orderDetail.setProduct(cart.get(x).getProduct());
+			orderDetail.setQuantity(cart.get(x).getQuantity());
+			this.orderDetailRepository.save(orderDetail);
 		}
-		return "redirect:/admin/orders/index";
+
+		session.removeAttribute("thanhTien");
+		session.removeAttribute("hoaDonMoi");
+
+		return "redirect:/home";
 	}
+
 }

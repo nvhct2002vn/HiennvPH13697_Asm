@@ -34,36 +34,7 @@
 				<td>${ order.account.fullname }</td>
 				<td>${ order.createDate }</td>
 				<td>${ order.address }</td>
-				<td>${ order.status == 0?"Chờ":order.status == 1?"Đã đặt hàng":order.status == 2?"Đã xác nhận":"Đã huỷ"}</td>
-				<!-- 				<td><a class="btn btn-info" -->
-				<%-- 					href="/HiennvPH13697_Asm/admin/orders/edit/${ order.id }">Sửa</a></td> --%>
-				<!-- 				<td> -->
-				<!-- 					Button trigger modal -->
-				<!-- 					<button type="button" class="btn btn-danger" data-bs-toggle="modal" -->
-				<%-- 						data-bs-target="#exampleModal${ order.id }">Xóa</button> <!-- Modal --> --%>
-				<%-- 					<div class="modal fade" id="exampleModal${ order.id }" --%>
-				<!-- 						tabindex="-1" aria-labelledby="exampleModalLabel" -->
-				<!-- 						aria-hidden="true"> -->
-				<!-- 						<div class="modal-dialog"> -->
-				<!-- 							<div class="modal-content"> -->
-				<!-- 								<div class="modal-header"> -->
-				<!-- 									<h5 class="modal-title" id="exampleModalLabel">Xóa sản -->
-				<!-- 										phẩm</h5> -->
-				<!-- 									<button type="button" class="btn-close" data-bs-dismiss="modal" -->
-				<!-- 										aria-label="Close"></button> -->
-				<!-- 								</div> -->
-				<!-- 								<div class="modal-body">Bạn chắc chắn muốn xóa hoá đơn này -->
-				<!-- 									hay không ?</div> -->
-				<!-- 								<div class="modal-footer"> -->
-				<!-- 									<button type="button" class="btn btn-secondary" -->
-				<!-- 										data-bs-dismiss="modal">Close</button> -->
-				<!-- 									<a class="btn btn-danger" -->
-				<%-- 										href="/HiennvPH13697_Asm/admin/orders/delete/${ order.id }">Xóa</a> --%>
-				<!-- 								</div> -->
-				<!-- 							</div> -->
-				<!-- 						</div> -->
-				<!-- 					</div> -->
-				<!-- 				</td> -->
+				<td>${ order.status == 0?"Đã huỷ đơn hàng":order.status == 1?"Đã đặt hàng":"Đã xác nhận"}</td>
 				<td><a class="btn btn-info"
 					href="/HiennvPH13697_Asm/admin/orders/order-details/${ order.id }">Xem
 						chi tiết</a></td>

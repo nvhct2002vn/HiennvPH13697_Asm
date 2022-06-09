@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,15 +113,14 @@ public class OrderController {
 	// xem chi tiết hoá đơn
 	@GetMapping("order-details/{id}")
 	public String orderDetails(@PathVariable("id") Order order, Model model, HttpSession session) {
-
+		session.setAttribute("idOrder", order.getId());
 		int id = order.getId();
 		if (order != null) {
 			List<OrderDetail> lstCartdt = this.orderDetailRepository.getAllByIDCart(id);
 			model.addAttribute("lstCartdt", lstCartdt);
 			model.addAttribute("khoangTrang", " ");
 		}
-		model.addAttribute("Buttonstatus", order.getStatus());
-		System.out.println("Buttonstatus: " + order.getStatus());
+		model.addAttribute("status", order.getStatus());
 
 		Long tongTienDetails = this.orderDetailRepository.SumDetails(order.getId());
 
@@ -135,5 +136,19 @@ public class OrderController {
 		model.addAttribute("view", view);
 
 		return "/layout";
+	}
+
+	@GetMapping("xacNhanDonHang/{id}")
+	public String xacNhanDonHang(HttpSession session, Model model, @PathVariable("id") Order order,
+			@Validated @ModelAttribute("entity") OrderModel entity, BindingResult result) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		try {
+			session.setAttribute("message", "Xác nhận đơn hàng thành công!");
+			order.setStatus(2);
+			this.orderRepository.save(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/admin/orders/index";
 	}
 }

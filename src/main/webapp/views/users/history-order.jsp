@@ -22,7 +22,7 @@
 				<td>${ order.account.fullname }</td>
 				<td>${ order.createDate }</td>
 				<td>${ order.address }</td>
-				<td>${ order.status == 0?"Chờ":order.status == 1?"Đã đặt hàng":order.status == 2?"Đã xác nhận":"Đã huỷ"}</td>
+				<td>${ order.status == 0?"Đã huỷ đơn hàng":order.status == 1?"Đã đặt hàng":"Đã xác nhận"}</td>
 				<td><a class="btn btn-info"
 					href="/HiennvPH13697_Asm/users/history-details/${ order.id }">Xem
 						chi tiết</a></td>

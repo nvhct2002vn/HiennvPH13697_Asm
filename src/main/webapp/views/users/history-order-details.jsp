@@ -21,7 +21,19 @@
 			</c:forEach>
 		</table>
 		<p>Tổng Tiền: ${ tongTienDetails }</p>
-		<p>Địa chỉ: ${ diaChi }</p>
+		<p>Địa chỉ đặt hàng: ${diaChi}</p>
 	</div>
 </c:if>
-
+<c:if test="${ status == 1 }">
+	<div class="text-center">
+		<a class="btn btn-info"
+			href="/HiennvPH13697_Asm/users/huydonhang/${ idOrder }">Huỷ đơn
+			hàng</a>
+	</div>
+</c:if>
+<c:if test="${ status == 0 }">
+	<div class="text-center">
+		<a class="btn btn-info"
+			href="/HiennvPH13697_Asm/users/datlaidonhang/${ idOrder }">Đặt lại đơn hàng</a>
+	</div>
+</c:if>

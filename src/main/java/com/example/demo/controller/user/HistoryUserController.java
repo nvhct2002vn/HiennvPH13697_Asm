@@ -57,18 +57,43 @@ public class HistoryUserController {
 
 		List<OrderDetail> lstCartdt = this.orderDetailsRepository.getAllByIDCart(order.getId());
 		model.addAttribute("lstCartdt", lstCartdt);
+
 		model.addAttribute("diaChi", order.getAddress());
+		model.addAttribute("status", order.getStatus());
 		model.addAttribute("khoangTrang", " ");
-		System.out.println("Lisst ordt:" + lstCartdt);
-		System.out.println("order:" + order);
 
 		Long tongTienDetails = this.orderDetailsRepository.SumDetails(order.getId());
-		System.out.println("Tong tiền: " + tongTienDetails);
 		model.addAttribute("tongTienDetails", tongTienDetails);
 
 		String view = "/views/users/history-order-details.jsp";
 		model.addAttribute("view", view);
 
 		return "/layout";
+	}
+
+	@GetMapping("huydonhang/{id}")
+	public String huydonhang(HttpSession session, Model model, @PathVariable("id") Order order) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		try {
+			session.setAttribute("message", "Huỷ đặt hàng thành công!");
+			order.setStatus(0);
+			this.orderRepository.save(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/users/histories";
+	}
+
+	@GetMapping("datlaidonhang/{id}")
+	public String datlaidonhang(HttpSession session, Model model, @PathVariable("id") Order order) {
+		model.addAttribute("idOrder", session.getAttribute("idOrder"));
+		try {
+			session.setAttribute("message", "Huỷ đặt hàng thành công!");
+			order.setStatus(1);
+			this.orderRepository.save(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/users/histories";
 	}
 }
