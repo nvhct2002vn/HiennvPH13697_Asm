@@ -96,7 +96,7 @@ public class AccountController {
 					e.printStackTrace();
 				}
 			} else {
-				accountModel.setPhoto(null);
+				accountModel.setPhoto("user.png");
 			}
 			account.setPhoto(accountModel.getPhoto());
 			account.setAdmin(accountModel.getAdmin());
@@ -161,7 +161,7 @@ public class AccountController {
 						e.printStackTrace();
 					}
 				} else {
-					entity.setPhoto(null);
+					entity.setPhoto("user.png");
 				}
 				account.setPhoto(entity.getPhoto());
 				account.setAdmin(entity.getAdmin());
