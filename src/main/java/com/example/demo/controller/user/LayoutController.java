@@ -169,26 +169,29 @@ public class LayoutController {
 		int thanhTien = 0;
 		int tongTien = 0;
 
-		Set<Integer> keySet = cart.keySet();
-		for (Integer x : keySet) {
-			thanhTien = cart.get(x).getQuantity() * cart.get(x).getProduct().getPrice();
-			System.out.println("Thành tiền for: " + thanhTien);
-			tongTien += thanhTien;
-			System.out.println("Tổng tiền for: " + tongTien);
+		if (cart != null) {
+			Set<Integer> keySet = cart.keySet();
+			for (Integer x : keySet) {
+				thanhTien = cart.get(x).getQuantity() * cart.get(x).getProduct().getPrice();
+				System.out.println("Thành tiền for: " + thanhTien);
+				tongTien += thanhTien;
+				System.out.println("Tổng tiền for: " + tongTien);
+			}
+//			session.setAttribute("thanhTien", thanhTien);
+			model.addAttribute("tongTien", tongTien);
+			model.addAttribute("khoangTrang", " ");
 		}
-//		session.setAttribute("thanhTien", thanhTien);
-		model.addAttribute("tongTien", tongTien);
-		model.addAttribute("khoangTrang", " ");
-
+		System.out.println(cart);
 		String view = "/views/homes/cart.jsp";
 		model.addAttribute("view", view);
 
 		return "/layout";
 	}
 
-	// thếm sản phẩm vào rỏ hàng
+	// thêm sản phẩm vào rỏ hàng
 	@GetMapping("addToCart/{id}")
-	public String addToCart(Model model, @PathVariable("id") Product prd, HttpSession session) {
+	public String addToCart(Model model, @PathVariable("id") Product prd, HttpSession session,
+			@RequestParam("quantity") Integer quantity) {
 
 		int idPrd = prd.getId();
 		CartModel cartModel;
@@ -196,14 +199,14 @@ public class LayoutController {
 		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
 		if (cart == null) {
 			cart = new HashMap<Integer, CartModel>();
-			cartModel = new CartModel(prd, 1);
+			cartModel = new CartModel(prd, quantity);
 			cart.put(idPrd, cartModel);
 		} else {
 			if (cart.containsKey(idPrd)) {
 				cartModel = cart.get(idPrd);
 				cartModel.setQuantity(cartModel.getQuantity() + 1);
 			} else {
-				cartModel = new CartModel(prd, 1);
+				cartModel = new CartModel(prd, quantity);
 				cart.put(idPrd, cartModel);
 			}
 		}
@@ -214,18 +217,39 @@ public class LayoutController {
 		return "redirect:/cart";
 	}
 
+	@PostMapping("/updateQuantity")
+	public String updateQuantity(@RequestParam("quantity") Integer quantity, @RequestParam("key") Integer key,
+			HttpSession session) {
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
+		CartModel productCart;
+
+		if (cart.containsKey(key)) {
+			productCart = cart.get(key);
+			if (quantity < 1) {
+				quantity = 1;
+			}
+			productCart.setQuantity(quantity);
+		}
+		System.out.println(cart);
+		session.setAttribute("hoaDonMoi", cart);
+		return "redirect:/cart";
+	}
+
 	// xoá sp trong rỏ hàng
 	@GetMapping("removePrdOnCart/{id}")
 	public String removePrdOnCart(@PathVariable("id") Integer id, HttpSession session) {
 		System.out.println("id xoá: " + id);
 
-		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("cart");
+		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
 
 		if (cart != null) {
 			if (cart.containsKey(id)) {
 				cart.remove(id);
+				System.out.println("Xoá thành công!");
 			}
 		}
+
+		session.setAttribute("hoaDonMoi", cart);
 
 		return "redirect:/cart";
 	}
@@ -258,7 +282,7 @@ public class LayoutController {
 		session.removeAttribute("thanhTien");
 		session.removeAttribute("hoaDonMoi");
 
-		return "redirect:/home";
+		return "redirect:/users/histories";
 	}
 
 }

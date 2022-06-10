@@ -21,7 +21,8 @@
 </div>
 <div class="row product_border">
 	<c:forEach var="prd" items="${ dsPrd }">
-		<div class="col-12 col-md-3">
+		<c:if test="${ prd.available == 1 }">
+			<div class="col-12 col-md-3">
 			<div class="container_overlay title-img">
 				<a href="/HiennvPH13697_Asm/products/${ prd.id }"> <img
 					src="/HiennvPH13697_Asm/photoProducts/${ prd.image }" alt="Avatar"
@@ -34,5 +35,6 @@
 				<p class="product_price">${ prd.price }</p>
 			</div>
 		</div>
+		</c:if>
 	</c:forEach>
 </div>

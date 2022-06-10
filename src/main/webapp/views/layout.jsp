@@ -66,7 +66,7 @@
 								<c:if test="${ empty userLogin}">
 									<li><a href="/HiennvPH13697_Asm/login-form"
 										class="dropdown-item">Đăng nhập</a></li>
-									<li><a href="/HiennvPH13697_Asm/accounts/register"
+									<li><a href="/HiennvPH13697_Asm/register/register-form"
 										class="dropdown-item">Đăng ký</a></li>
 								</c:if>
 								<c:if test="${ !empty userLogin}">
@@ -90,8 +90,8 @@
 									<li><a class="dropdown-item"
 										href="/HiennvPH13697_Asm/logout">Đăng xuất</a></li>
 								</c:if>
-<!-- 								<li><a class="dropdown-item" -->
-<!-- 									href="/HiennvPH13697_Asm/history">Lịch sử</a></li> -->
+								<!-- 								<li><a class="dropdown-item" -->
+								<!-- 									href="/HiennvPH13697_Asm/history">Lịch sử</a></li> -->
 							</ul></li>
 					</ul>
 				</div>

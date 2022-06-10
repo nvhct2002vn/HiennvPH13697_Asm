@@ -28,7 +28,15 @@
 					<td><img alt="Product" style="max-height: 100px"
 						src="/HiennvPH13697_Asm/photoProducts/${ cart.value.product.image }"></td>
 					<td>${ cart.value.product.category.name}${ khoangTrang }${ cart.value.product.name }</td>
-					<td>${ cart.value.quantity }</td>
+					<td>
+						<form action="/HiennvPH13697_Asm/updateQuantity" method="post">
+<%-- 							<c:if test=""> --%>
+								<input type="hidden" value="${ cart.key }" name="key">
+<%-- 							</c:if> --%>
+							<input style="max-width: 80px" type="number"
+								value="${ cart.value.quantity }" name="quantity">
+						</form>
+					</td>
 					<td>${ cart.value.product.price }</td>
 					<td>${ cart.value.product.price * cart.value.quantity}</td>
 					<td>

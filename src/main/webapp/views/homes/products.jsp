@@ -10,11 +10,14 @@
 	<div class="col-12 col-md-5 mt-3">
 		<h4 class="fw-bold">${ prd.category.name }${ khoangTrang }${ prd.name }</h4>
 		<p>Giá: ${ prd.price }</p>
-		<div class="row text-center">
-			<div class="col-9">
-				<a href="/HiennvPH13697_Asm/addToCart/${ prd.id }"
-					class="btn btn-outline-secondary">Thêm vào rỏ hàng</a>
+		<form action="/HiennvPH13697_Asm/addToCart/${ prd.id }" method="get">
+			<input style="max-width: 80px" type="number" value="1"
+				name="quantity" placeholder="1">
+			<div class="row text-center">
+				<div class="col-9">
+					<button class="btn btn-outline-secondary">Thêm vào rỏ hàng</button>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>
