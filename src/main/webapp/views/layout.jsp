@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,7 +66,7 @@
 								<c:if test="${ empty userLogin}">
 									<li><a href="/HiennvPH13697_Asm/login-form"
 										class="dropdown-item">Đăng nhập</a></li>
-									<li><a href="/HiennvPH13697_Asm/register/register-form"
+									<li><a href="/HiennvPH13697_Asm/register-form"
 										class="dropdown-item">Đăng ký</a></li>
 								</c:if>
 								<c:if test="${ !empty userLogin}">
@@ -80,23 +80,22 @@
 										<li><a href="/HiennvPH13697_Asm/admin/orders/index"
 											class="dropdown-item">Quản lý đơn hàng</a></li>
 									</c:if>
-									<li><a href="#" class="dropdown-item"
-										data-bs-toggle="modal" data-bs-target="#doiMatKhau">Đổi
-											mật khẩu</a></li>
-									<li><a class="dropdown-item" href="#">Cập nhật tài
+									<li><a href="/HiennvPH13697_Asm/change-password"
+										class="dropdown-item">Đổi mật khẩu</a></li>
+									<li><a class="dropdown-item"
+										href="/HiennvPH13697_Asm/update-information">Cập nhật tài
 											khoản</a></li>
 									<li><a class="dropdown-item"
 										href="/HiennvPH13697_Asm/users/histories">Lịch sử mua hàng</a></li>
 									<li><a class="dropdown-item"
 										href="/HiennvPH13697_Asm/logout">Đăng xuất</a></li>
 								</c:if>
-								<!-- 								<li><a class="dropdown-item" -->
-								<!-- 									href="/HiennvPH13697_Asm/history">Lịch sử</a></li> -->
 							</ul></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
+
 		<div class="row p-5">
 			<jsp:include page="${view}"></jsp:include>
 		</div>

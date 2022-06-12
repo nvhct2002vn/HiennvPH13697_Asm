@@ -5,17 +5,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.example.demo.Interceptors.AuthencationInterceptror;
+import com.example.demo.Interceptors.CheckNotNullLoginInterceptor;
 
 @Configuration
-public class AuthencationInterceptorConfig implements WebMvcConfigurer {
+public class CheckNullLoginInterceptorConfig implements WebMvcConfigurer {
 	@Autowired
-	private AuthencationInterceptror loginInterceptror;
+	private CheckNotNullLoginInterceptor CheckNotNullLoginInterceptor;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(loginInterceptror).addPathPatterns("/admin/**", "/cart", "/users/**")
-				.excludePathPatterns("/login-form");
+		registry.addInterceptor(CheckNotNullLoginInterceptor).addPathPatterns("/register-form", "/login-form");
 	}
 
 }
