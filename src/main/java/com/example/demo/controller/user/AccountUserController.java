@@ -112,15 +112,15 @@ public class AccountUserController {
 			return "/layout";
 		} else {
 			if (acc != null) {
-				if (changePass.getMkMoi().equals(changePass.getMkMoi2())) {
+				if (!check) {
+					session.setAttribute("error", "Mật cũ không chính xác!");
+					return "redirect:/change-password";
+				} else if (changePass.getMkMoi().equals(changePass.getMkMoi2())) {
 					// lấy mkMoi2 và mã hoá
 					String encrypted = com.example.demo.untils.EncryptUtil.encrypt(changePass.getMkMoi2());
 
 					acc.setPassword(encrypted);
 					this.accountRepo.save(acc);
-				} else if (!check) {
-					session.setAttribute("error", "Mật cũ không chính xác!");
-					return "redirect:/change-password";
 				} else if (changePass.getMkMoi() != changePass.getMkMoi2()) {
 					session.setAttribute("error", "Mật khẩu mới không khớp!");
 					return "redirect:/change-password";

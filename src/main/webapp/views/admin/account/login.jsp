@@ -24,12 +24,12 @@
 			<div>
 				<label>Username</label> <input class="form-control mb-3" type="text"
 					name="username">
-				<form:errors path="username" class="badge text-danger"></form:errors>
+				<form:errors path="username" name="username" class="badge text-danger"></form:errors>
 			</div>
 			<div>
 				<label>Password</label> <input class="form-control mb-3"
 					type="password" name="password">
-				<form:errors path="password" class="badge text-danger"></form:errors>
+				<form:errors path="password" name="password" class="badge text-danger"></form:errors>
 			</div>
 			<div class="text-center">
 				<button class="btn btn-success">Login now</button>

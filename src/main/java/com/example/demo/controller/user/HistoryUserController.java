@@ -58,6 +58,8 @@ public class HistoryUserController {
 		List<OrderDetail> lstCartdt = this.orderDetailsRepository.getAllByIDCart(order.getId());
 		model.addAttribute("lstCartdt", lstCartdt);
 
+		session.setAttribute("idOrder", order.getId()); // gán id để t lấy lại id gán cho các nút huỷ, đặt lại hàng
+
 		model.addAttribute("diaChi", order.getAddress());
 		model.addAttribute("sdt", order.getSdt());
 		model.addAttribute("status", order.getStatus());

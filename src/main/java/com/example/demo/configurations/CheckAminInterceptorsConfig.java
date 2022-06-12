@@ -12,6 +12,7 @@ public class CheckAminInterceptorsConfig implements WebMvcConfigurer {
 	@Autowired
 	private CheckAminInterceptors checkAminInterceptors;
 
+	// nếu là user thì ko thể vo trang admin
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(checkAminInterceptors).addPathPatterns("/admin/**").excludePathPatterns("/login-form");

@@ -8,10 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.example.demo.Interceptors.CheckNotNullLoginInterceptor;
 
 @Configuration
-public class CheckNullLoginInterceptorConfig implements WebMvcConfigurer {
+public class CheckNotNullLoginInterceptorConfig implements WebMvcConfigurer {
 	@Autowired
 	private CheckNotNullLoginInterceptor CheckNotNullLoginInterceptor;
-
+	
+	// nếu đã đăng nhập thì ko thể vào mấy trang này
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(CheckNotNullLoginInterceptor).addPathPatterns("/register-form", "/login-form");

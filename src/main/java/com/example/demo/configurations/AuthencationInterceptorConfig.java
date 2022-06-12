@@ -12,10 +12,11 @@ public class AuthencationInterceptorConfig implements WebMvcConfigurer {
 	@Autowired
 	private AuthencationInterceptror loginInterceptror;
 
+	// nếu chưa đăng nhập thì ko thể vào các trang này ngoại trừ trang đăng nhập
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(loginInterceptror).addPathPatterns("/admin/**", "/cart", "/users/**")
-				.excludePathPatterns("/login-form");
+		registry.addInterceptor(loginInterceptror).addPathPatterns("/admin/**", "/cart", "/users/**",
+				"/change-password", "/change-password-store", "/update-information").excludePathPatterns("/login-form");
 	}
 
 }
