@@ -19,6 +19,10 @@
 				<label>Address</label>
 				<form:input class="form-control mb-3" path="address" />
 			</div>
+			<div>
+				<label>Sdt</label>
+				<form:input class="form-control mb-3" path="sdt" />
+			</div>
 			<div class="text-center">
 				<button class="btn btn-secondary">Create</button>
 			</div>

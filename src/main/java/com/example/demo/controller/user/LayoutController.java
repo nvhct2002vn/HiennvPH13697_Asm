@@ -256,7 +256,7 @@ public class LayoutController {
 
 	// Đặt hàng
 	@GetMapping("dathang")
-	public String dathang(HttpSession session, Model model, @RequestParam("address") String address) {
+	public String dathang(HttpSession session, Model model, @RequestParam("address") String address,@RequestParam("sdt") String sdt) {
 		Account acc = (Account) session.getAttribute("userLogin");
 
 		LocalDate localDate = LocalDate.now();
@@ -264,6 +264,7 @@ public class LayoutController {
 		order.setAccount(acc);
 		order.setCreateDate(localDate);
 		order.setAddress(address);
+		order.setSdt(sdt);
 		order.setStatus(1);
 		this.orderRepository.save(order);
 

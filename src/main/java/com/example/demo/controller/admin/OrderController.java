@@ -74,6 +74,7 @@ public class OrderController {
 		order.setAccount(orderCreate.getAccount());
 		order.setCreateDate(localDate);
 		order.setAddress(orderCreate.getAddress());
+		order.setSdt(orderCreate.getSdt());
 
 		this.orderRepository.save(order);
 
@@ -98,6 +99,7 @@ public class OrderController {
 
 		orderUpdate.setAccount(orderModel.getAccount());
 		orderUpdate.setAddress(orderModel.getAddress());
+		orderUpdate.setSdt(orderModel.getSdt());
 		orderUpdate.setCreateDate(localDate);
 		this.orderRepository.save(orderUpdate);
 

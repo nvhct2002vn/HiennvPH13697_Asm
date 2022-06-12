@@ -19,5 +19,7 @@ public class OrderModel {
 	private Date createDate;
 	@NotBlank(message = "Vui lòng không để trống địa chỉ")
 	private String address;
+	@NotBlank(message = "Vui lòng không để trống số điện thoại")
+	private String sdt;
 	private int status;
 }

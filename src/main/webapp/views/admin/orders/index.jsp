@@ -24,6 +24,7 @@
 			<th scope="col">User</th>
 			<th scope="col">Created Date</th>
 			<th scope="col">Address</th>
+			<th scope="col">Number Phone</th>
 			<th scope="col">Status</th>
 			<th scope="col" colspan="3">Thao tác</th>
 		</tr>
@@ -34,6 +35,7 @@
 				<td>${ order.account.fullname }</td>
 				<td>${ order.createDate }</td>
 				<td>${ order.address }</td>
+				<td>${ order.sdt }</td>
 				<td>${ order.status == 0?"Đã huỷ đơn hàng":order.status == 1?"Đã đặt hàng":"Đã xác nhận"}</td>
 				<td><a class="btn btn-info"
 					href="/HiennvPH13697_Asm/admin/orders/order-details/${ order.id }">Xem

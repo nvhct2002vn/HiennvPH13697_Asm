@@ -59,6 +59,7 @@ public class HistoryUserController {
 		model.addAttribute("lstCartdt", lstCartdt);
 
 		model.addAttribute("diaChi", order.getAddress());
+		model.addAttribute("sdt", order.getSdt());
 		model.addAttribute("status", order.getStatus());
 		model.addAttribute("khoangTrang", " ");
 

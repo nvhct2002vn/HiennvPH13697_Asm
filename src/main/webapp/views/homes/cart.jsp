@@ -30,9 +30,9 @@
 					<td>${ cart.value.product.category.name}${ khoangTrang }${ cart.value.product.name }</td>
 					<td>
 						<form action="/HiennvPH13697_Asm/updateQuantity" method="post">
-<%-- 							<c:if test=""> --%>
-								<input type="hidden" value="${ cart.key }" name="key">
-<%-- 							</c:if> --%>
+							<%-- 							<c:if test=""> --%>
+							<input type="hidden" value="${ cart.key }" name="key">
+							<%-- 							</c:if> --%>
 							<input style="max-width: 80px" type="number"
 								value="${ cart.value.quantity }" name="quantity">
 						</form>
@@ -74,8 +74,10 @@
 		<div class="row">
 			<div class=" col-md-5 col-12  m-auto">
 				<form action="/HiennvPH13697_Asm/dathang" method="get">
-					Địa chỉ:<input class="form-control mb-3" type="text" name="address"
-						required="required">
+					<label>Địa chỉ:</label> <input class="form-control mb-3"
+						type="text" name="address" required="required"> <label>Số
+						điện thoại:</label> <input class="form-control mb-3" type="text"
+						name="sdt" required="required">
 					<div class="text-center">
 						<button class="btn btn-success">Đặt hàng</button>
 					</div>

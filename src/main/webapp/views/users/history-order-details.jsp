@@ -21,6 +21,7 @@
 			</c:forEach>
 		</table>
 		<p>Tổng Tiền: ${ tongTienDetails }</p>
+		<p>Số điện thoại: ${ sdt }</p>
 		<p>Địa chỉ đặt hàng: ${diaChi}</p>
 	</div>
 </c:if>

@@ -32,6 +32,8 @@ public class Order implements Serializable {
 	private LocalDate createDate;
 	@Column(nullable = false, length = 255)
 	private String address;
+	@Column(nullable = false, length = 10)
+	private String sdt;
 	@Column(nullable = false, precision = 10)
 	private int status;
 
@@ -70,6 +72,14 @@ public class Order implements Serializable {
 	 */
 	public void setId(int aId) {
 		id = aId;
+	}
+
+	public String getSdt() {
+		return sdt;
+	}
+
+	public void setSdt(String sdt) {
+		this.sdt = sdt;
 	}
 
 	/**
