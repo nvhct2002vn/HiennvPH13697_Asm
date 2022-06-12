@@ -74,10 +74,10 @@
 		<div class="row">
 			<div class=" col-md-5 col-12  m-auto">
 				<form action="/HiennvPH13697_Asm/dathang" method="get">
-					<label>Địa chỉ:</label> <input class="form-control mb-3"
-						type="text" name="address" required="required"> <label>Số
-						điện thoại:</label> <input class="form-control mb-3" type="text"
-						name="sdt" required="required">
+					<label>Số điện thoại:</label> <input class="form-control mb-3"
+						type="text" name="sdt" required="required"> <label>Địa
+						chỉ:</label> <input class="form-control mb-3" type="text" name="address"
+						required="required">
 					<div class="text-center">
 						<button class="btn btn-success">Đặt hàng</button>
 					</div>

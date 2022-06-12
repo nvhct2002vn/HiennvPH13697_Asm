@@ -111,10 +111,10 @@ public class LayoutController {
 	public String login(Model model, HttpSession session, @Validated @ModelAttribute("login") LoginModel login,
 			BindingResult result) {
 		try {
-			String email = login.getEmail();
+			String username = login.getUsername();
 			String password = login.getPassword();
 
-			Account account = accRepository.findByEmail(email);
+			Account account = accRepository.findByUsername(username);
 			boolean check = EncryptUtil.check(password, account.getPassword());
 
 			if (result.hasErrors()) {
@@ -256,7 +256,8 @@ public class LayoutController {
 
 	// Đặt hàng
 	@GetMapping("dathang")
-	public String dathang(HttpSession session, Model model, @RequestParam("address") String address,@RequestParam("sdt") String sdt) {
+	public String dathang(HttpSession session, Model model, @RequestParam("address") String address,
+			@RequestParam("sdt") String sdt) {
 		Account acc = (Account) session.getAttribute("userLogin");
 
 		LocalDate localDate = LocalDate.now();
