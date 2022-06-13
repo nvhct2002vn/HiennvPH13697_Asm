@@ -110,28 +110,28 @@ public class LayoutController {
 	@PostMapping("/login")
 	public String login(Model model, HttpSession session, @Validated @ModelAttribute("login") LoginModel login,
 			BindingResult result) {
-		try {
+		if (result.hasErrors()) {
+			String view = "/views/admin/account/login.jsp";
+			model.addAttribute("view", view);
+			return "/layout";
+		} else {
 			String username = login.getUsername();
 			String password = login.getPassword();
 
 			Account account = accRepository.findByUsername(username);
-			boolean check = EncryptUtil.check(password, account.getPassword());
-
-			if (result.hasErrors()) {
-				String view = "/views/admin/account/login.jsp";
-				model.addAttribute("view", view);
-				return "/layout";
-			} else {
+			if (account != null) {
+				boolean check = EncryptUtil.check(password, account.getPassword());
 				if (check == true) {
 					session.setAttribute("userLogin", account);
 					return "redirect:/home";
 				} else {
 					session.setAttribute("error", "Mật khẩu không chính xác!");
+					return "redirect:/login-form";
 				}
+			}else {
+				session.setAttribute("error", "Tài khoản không tồn tại!");
 			}
-		} catch (Exception e) {
-			session.setAttribute("error", "Đăng nhập thất bại!");
-			e.printStackTrace();
+
 		}
 		return "redirect:/login-form";
 	}
