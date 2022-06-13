@@ -128,7 +128,7 @@ public class LayoutController {
 					session.setAttribute("error", "Mật khẩu không chính xác!");
 					return "redirect:/login-form";
 				}
-			}else {
+			} else {
 				session.setAttribute("error", "Tài khoản không tồn tại!");
 			}
 
