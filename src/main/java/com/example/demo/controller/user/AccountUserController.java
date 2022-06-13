@@ -60,32 +60,32 @@ public class AccountUserController {
 			account.setPassword(encrypted);
 
 //			Thêm ảnh
-			if (!accountModel.getMultiImage().isEmpty()) {
-				String path = context.getRealPath("/photoAccounts");
-				File file = new File(path);
-				if (!file.exists()) {
-					file.mkdirs();
-				}
-				try {
-					String fileName = accountModel.getMultiImage().getOriginalFilename();
-					File finalFile = new File(file.getAbsoluteFile() + File.separator + fileName);
-					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(finalFile));
-					stream.write(accountModel.getMultiImage().getBytes());
-					stream.close();
-
-					accountModel.setPhoto(fileName);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				accountModel.setPhoto("hiennv.png");
-			}
-			account.setPhoto(accountModel.getPhoto());
+//			if (!accountModel.getMultiImage().isEmpty()) {
+//				String path = context.getRealPath("/photoAccounts");
+//				File file = new File(path);
+//				if (!file.exists()) {
+//					file.mkdirs();
+//				}
+//				try {
+//					String fileName = accountModel.getMultiImage().getOriginalFilename();
+//					File finalFile = new File(file.getAbsoluteFile() + File.separator + fileName);
+//					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(finalFile));
+//					stream.write(accountModel.getMultiImage().getBytes());
+//					stream.close();
+//
+//					accountModel.setPhoto(fileName);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				accountModel.setPhoto("hiennv.png");
+//			}
+//			account.setPhoto(accountModel.getPhoto());
+			accountModel.setPhoto("user.png");
 			account.setAdmin(0);
 			account.setActivated(1);
 			this.accountRepo.save(account);
 			session.setAttribute("message", "Đăng ký thành công");
-			System.out.println("account: " + account.getPhoto());
 		}
 		return "redirect:/login-form";
 
@@ -132,8 +132,12 @@ public class AccountUserController {
 	}
 
 	@GetMapping("update-information")
-	public String updateInformation(Model model, @ModelAttribute("entity") AccountModel accountModel,
-			BindingResult result, HttpSession session) {
+	public String updateInformation(Model model, Account acc, HttpSession session) {
+
+		acc = (Account) session.getAttribute("userLogin");
+
+		model.addAttribute("entity", acc);
+
 		String view = "/views/users/update-information.jsp";
 		model.addAttribute("view", view);
 		return "/layout";

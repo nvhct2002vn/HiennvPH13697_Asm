@@ -196,6 +196,10 @@ public class LayoutController {
 		int idPrd = prd.getId();
 		CartModel cartModel;
 
+		if (quantity < 0) {
+			quantity = 1;
+		}
+
 		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
 		if (cart == null) {
 			cart = new HashMap<Integer, CartModel>();

@@ -3,9 +3,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <div class="row">
 	<div class="col-md-5 col-12 m-auto">
-		<form:form method="post"
-			action="/HiennvPH13697_Asm/storeRegister"
-			modelAttribute="entity" enctype="multipart/form-data">
+		<form:form method="post" action="/HiennvPH13697_Asm/storeRegister"
+			modelAttribute="entity">
 			<div>
 				<label class="mt-3 form-label">Fullname</label>
 				<form:input class="form-control" path="fullname" name="fullname" />
@@ -28,13 +27,6 @@
 				<label class="mt-3 form-label">Password</label>
 				<form:password class="form-control" path="password" name="password" />
 				<form:errors path="password" class="badge text-danger"></form:errors>
-			</div>
-
-			<div>
-				<label class="mt-3 form-label">Photo</label>
-				<form:input type="file" class="form-control" path="multiImage"
-					name="multiImage" />
-				<%-- 				<form:errors path="multiImage" class="badge text-danger"></form:errors> --%>
 			</div>
 
 			<div class="text-center mt-3">
