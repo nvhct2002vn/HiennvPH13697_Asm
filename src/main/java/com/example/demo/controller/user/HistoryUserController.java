@@ -91,7 +91,7 @@ public class HistoryUserController {
 	public String datlaidonhang(HttpSession session, Model model, @PathVariable("id") Order order) {
 		model.addAttribute("idOrder", session.getAttribute("idOrder"));
 		try {
-			session.setAttribute("message", "Huỷ đặt hàng thành công!");
+			session.setAttribute("message", "Đặt lại đơn hàng thành công!");
 			order.setStatus(1);
 			this.orderRepository.save(order);
 		} catch (Exception e) {
