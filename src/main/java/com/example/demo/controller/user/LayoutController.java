@@ -208,7 +208,7 @@ public class LayoutController {
 		} else {
 			if (cart.containsKey(idPrd)) {
 				cartModel = cart.get(idPrd);
-				cartModel.setQuantity(cartModel.getQuantity() + 1);
+				cartModel.setQuantity(cartModel.getQuantity() + quantity);
 			} else {
 				cartModel = new CartModel(prd, quantity);
 				cart.put(idPrd, cartModel);
