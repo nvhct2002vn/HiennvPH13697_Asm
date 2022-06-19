@@ -221,8 +221,8 @@ public class LayoutController {
 		return "redirect:/cart";
 	}
 
-	@PostMapping("/updateQuantity")
-	public String updateQuantity(@RequestParam("quantity") Integer quantity, @RequestParam("key") Integer key,
+	@PostMapping("/updateQuantity/{key}")
+	public String updateQuantity(@RequestParam("quantity") Integer quantity, @PathVariable("key") Integer key,
 			HttpSession session) {
 		HashMap<Integer, CartModel> cart = (HashMap<Integer, CartModel>) session.getAttribute("hoaDonMoi");
 		CartModel productCart;
@@ -285,6 +285,8 @@ public class LayoutController {
 			this.orderDetailRepository.save(orderDetail);
 		}
 
+		session.setAttribute("message", "Bạn đã đặt hàng thành công!");
+		
 		session.removeAttribute("thanhTien");
 		session.removeAttribute("hoaDonMoi");
 
