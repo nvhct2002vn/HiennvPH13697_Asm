@@ -47,24 +47,27 @@
 	<hr />
 	<div class="row product_border">
 		<c:forEach var="prd" items="${ dsPrd }">
-			<div class="col-12 col-md-3">
-				<div class="container_overlay title-img">
-					<a href="/HiennvPH13697_Asm/products/${ prd.id }"> <img
-						src="/HiennvPH13697_Asm/photoProducts/${ prd.image }" alt="Avatar"
-						class="image_product img-fluid" />
-					</a>
+			<c:if test="${ prd.available == 1 }">
+				<div class="col-12 col-md-3">
+					<div class="container_overlay title-img">
+						<a href="/HiennvPH13697_Asm/products/${ prd.id }"> <img
+							src="/HiennvPH13697_Asm/photoProducts/${ prd.image }"
+							alt="Avatar" class="image_product img-fluid" />
+						</a>
+					</div>
+					<div class="text-center">
+						<a class="product_name"
+							href="/HiennvPH13697_Asm/product/${ prd.id }">${ prd.category.name }${ khoangTrang }${ prd.name }</a>
+						<p class="product_price">${ prd.price }</p>
+					</div>
 				</div>
-				<div class="text-center">
-					<a class="product_name"
-						href="/HiennvPH13697_Asm/product/${ prd.id }">${ prd.category.name }${ khoangTrang }${ prd.name }</a>
-					<p class="product_price">${ prd.price }</p>
-				</div>
-			</div>
+			</c:if>
 		</c:forEach>
 	</div>
 	<div class="text-center my-3">
 		<button type="button" class="btn btn-outline-secondary">
-			<a href="/HiennvPH13697_Asm/collections/allitems" class="text-black text-decoration-none">Xem Tất Cả</a>
+			<a href="/HiennvPH13697_Asm/collections/allitems"
+				class="text-black text-decoration-none">Xem Tất Cả</a>
 		</button>
 	</div>
 </div>
